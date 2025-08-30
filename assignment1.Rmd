@@ -1,0 +1,107 @@
+---
+title: "Assignmnt 1 for Class 607 Data acquisition and Management by Mehreen Ali Gillani "
+output: html_document
+date: "2025-08-29"
+---
+
+## Introduction
+
+This is an R Markdown document assignment 1 by Mehreen Ali Gillani. I have downloaded dataset from kaggle
+https://www.kaggle.com/datasets/haseebindata/restaurant-orders 
+Link to the dataset is in my github repository https://github.com/mehreengillani/Assignment1.git
+It is a small dataset with 500 entries and 8 variables. 
+
+#In next few code blocks we will check our data types, unique values for categorical variables
+
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+In this code block I am importing tidyverse library, reading csv file and showing data head 
+
+```{r}
+library(tidyverse)
+data<-read.csv('restaurant_orders.csv')
+head(data)
+
+```
+#lets check this data dimension
+```{r}
+dim(data)
+```
+#lets view this dataset
+```{r}
+view(data)
+```
+
+#Lets display the summary of dataset
+```{r}
+summary(data)
+```
+#Lets display how many unique food items are in this dataset
+```{r}
+unique(data$Food.Item)
+table(data$Food.Item)
+```
+#lets disploay barchart for food item
+```{r}
+barplot(sort(table(data$Food.Item)), las=2, main = "Food Items order frequency", ylab = "Frequency")
+```
+
+#Lets display how many unique categories are in this dataset
+```{r}
+unique(data$Category)
+table(data$Category)
+```
+#lets disploay barchart for order category data
+```{r}
+barplot(sort(table(data$Category)), main = "Category order frequency", ylab = "Frequency")
+```
+
+#Lets display how many unique Payment.Methods are in this dataset also how many values for each category
+```{r}
+unique(data$Payment.Method)
+sort(table(data$Payment.Method))
+```
+
+#lets see the summary of price variable
+```{r}
+summary(data$Price)
+```
+
+#lets display the boxplot of price variable
+```{r}
+boxplot(data$Price)
+```
+
+#drop N/A, lets create clean dataframe and drop N/A from data
+
+```{r}
+library(tidyr)
+
+#there is no null values in our dataset
+clean <- drop_na(data)
+
+```
+#Lets see mean value for order quantity
+```{r}
+mean(clean$Quantity)
+```
+#lets create another column/variable to show whether an order is large or small depending upon the quantity of order. If it is above mean value its large otherwise its small
+```{r}
+clean$order.size <- as.factor(ifelse(clean$Quantity>mean(clean$Quantity), 'large','small'))
+```
+#lets drop Customer.Name column from data
+```{r}
+library(dplyr)
+clean <- clean %>% select(-Customer.Name) 
+```
+
+
+```{r}
+head(clean)
+```
+#conclusion
+This is a small dataset about restaurant orders. Food Item, order category, order Quantity and payment method are categorical features. In future, I will perform linear regression model to predict order price.
+
+
